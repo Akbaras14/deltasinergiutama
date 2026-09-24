@@ -32,7 +32,25 @@ Logo resmi belum tersedia. Nama perusahaan ditampilkan sebagai teks; tidak ada l
 
 Demo otomatis tersedia dalam development. Build produksi menonaktifkan portal demo kecuali server dijalankan dengan `DSU_DEMO=true`; opt-in ini hanya untuk demonstrasi/pengujian, bukan produksi operasional.
 
-## Verifikasi
+## Deploy ke Vercel
+
+Konfigurasi `vercel.json` dijalankan dari root repository dan mengarahkan hasil build ke `apps/web/.next`.
+
+- Root Directory: kosong (root repository), bukan `apps/web`.
+- Framework Preset: Next.js.
+- Install Command: `npm ci`.
+- Build Command: `npm run build`.
+- Output Directory: `apps/web/.next`.
+
+Build/install/output sudah ditetapkan di `vercel.json`. Jangan gunakan `.next` di root karena script build menjalankan workspace `apps/web`.
+
+Untuk menampilkan aplikasi simulasi, tambahkan environment variable `DSU_DEMO=true` pada environment Vercel yang akan digunakan (Production dan/atau Preview), kemudian deploy ulang. Tanpa opt-in ini, halaman produksi menampilkan layanan belum diaktifkan.
+
+Jika mengubah pengaturan deployment lama, lakukan Redeploy tanpa memakai build cache. Jangan mengunggah folder `.next` atau `node_modules` ke GitHub.
+
+Referensi: https://vercel.com/docs/project-configuration/vercel-json
+
+## Verifikasi lokal
 
 ```sh
 npm run lint
