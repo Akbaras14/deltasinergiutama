@@ -6,9 +6,7 @@ test("customer journey: detail, cart, checkout validation and payment review", a
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await page
-    .getByRole("link", { name: "Jelajahi tanaman", exact: true })
-    .click();
+  await page.getByRole("link", { name: /^Jelajahi tanaman$/i }).click();
   await page
     .getByRole("link", { name: "Lihat detail Monstera deliciosa" })
     .click();
@@ -45,31 +43,58 @@ test("customer journey: detail, cart, checkout validation and payment review", a
     page.getByText("Menunggu pembayaran", { exact: true }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Detail pembayaran" }).click();
-  await page
-    .getByLabel("Bukti pembayaran SIM-0001")
-    .setInputFiles({
-      name: "contoh.txt",
-      mimeType: "text/plain",
-      buffer: Buffer.from("simulation"),
-    });
+  await page.getByLabel("Bukti pembayaran SIM-0001").setInputFiles({
+    name: "contoh.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("simulation"),
+  });
   await page.getByRole("button", { name: "Kirim bukti simulasi" }).click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
     "maksimal 5 MB",
   );
-  await page
-    .getByLabel("Bukti pembayaran SIM-0001")
-    .setInputFiles({
-      name: "contoh.pdf",
-      mimeType: "application/pdf",
-      buffer: Buffer.from("%PDF-1.4 demo"),
-    });
+  await page.getByLabel("Bukti pembayaran SIM-0001").setInputFiles({
+    name: "contoh.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from("%PDF-1.4 demo"),
+  });
   await page.getByRole("button", { name: "Kirim bukti simulasi" }).click();
   await expect(
     page.getByText("Menunggu verifikasi", { exact: true }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Kembali ke katalog" }).click();
   await expect(page.getByText("66 tanaman tersedia")).toBeVisible();
+  await page.getByRole("link", { name: "Masuk", exact: true }).click();
+  await page.getByRole("button", { name: /budi@email.com/ }).click();
+  await page.getByRole("button", { name: "Masuk", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Keluar", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("link", { name: "Katalog tanaman", exact: true })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "Tambah Monstera deliciosa ke keranjang" })
+    .click();
+  await page.getByRole("button", { name: "Keluar", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: "Keranjang, 0 tanaman" }),
+  ).toBeVisible();
+  await expect(page.getByText("68 tanaman tersedia")).toBeVisible();
+  await page.getByRole("link", { name: "Pesanan saya", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Belum ada pesanan" }),
+  ).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("login focuses the first currently invalid field", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Masuk", exact: true }).click();
+  await expect(page.locator("#login-email")).toBeFocused();
+  await page.locator("#login-email").fill("budi@email.com");
+  await page.getByRole("button", { name: "Masuk", exact: true }).click();
+  await expect(page.locator("#login-password")).toBeFocused();
 });
 test("category filtering, sorting and empty cart recovery", async ({
   page,

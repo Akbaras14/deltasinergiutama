@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -10,11 +10,15 @@ import {
   Phone,
   Mail,
   ShoppingBag,
-  UserRound,
   Leaf,
 } from "lucide-react";
 import { ErrorState, LoadingState } from "@/components/ui/feedback";
-import { getSession, clearSession, type DemoSession } from "@/lib/session";
+import {
+  clearSession,
+  subscribeSession,
+  hasSession,
+  hasServerSession,
+} from "@/lib/session";
 import { useShop } from "./provider";
 import { CatalogContent, DetailContent, HomeContent } from "./catalog";
 import { CartContent, CheckoutContent, OrdersContent } from "./purchase";
@@ -25,14 +29,14 @@ export type CustomerView =
 
 /** Customer storefront layout; all displayed data and actions belong to the demo service. */
 export function Storefront({ view, id }: { view: CustomerView; id?: string }) {
-  const { state, loading, error, refresh } = useShop();
+  const { state, loading, error, refresh, reset } = useShop();
   const pathname = usePathname();
   const count = state.cart.reduce((sum, line) => sum + line.quantity, 0);
-  const [session, setSession] = useState<DemoSession | null>(null);
-
-  useEffect(() => {
-    setSession(getSession());
-  }, [pathname]);
+  const session = useSyncExternalStore(
+    subscribeSession,
+    hasSession,
+    hasServerSession,
+  );
   return (
     <div className="shop">
       <div className="shop-announcement">
@@ -97,7 +101,7 @@ export function Storefront({ view, id }: { view: CustomerView; id?: string }) {
                 className="shop-login-link"
                 onClick={() => {
                   clearSession();
-                  setSession(null);
+                  reset();
                 }}
               >
                 <LogOut size={18} />
@@ -210,7 +214,9 @@ export function Storefront({ view, id }: { view: CustomerView; id?: string }) {
           </div>
         </div>
         <div className="shop-footer-bottom">
-          <span>© 2026 CV. Delta Sinergi Utama. Seluruh hak cipta dilindungi.</span>
+          <span>
+            © 2026 CV. Delta Sinergi Utama. Seluruh hak cipta dilindungi.
+          </span>
           <span>Demo sesi ini · Muat ulang untuk mengatur ulang data</span>
           <Link href="/admin">Portal internal</Link>
         </div>

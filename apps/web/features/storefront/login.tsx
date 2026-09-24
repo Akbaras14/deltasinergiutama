@@ -20,7 +20,7 @@ export function LoginContent() {
 
   const demoUsers = getDemoUsers();
 
-  function validate(): boolean {
+  function validate() {
     const next: { email?: string; password?: string } = {};
     if (!email.trim()) {
       next.email = "Email wajib diisi.";
@@ -33,7 +33,7 @@ export function LoginContent() {
       next.password = "Password minimal 6 karakter.";
     }
     setErrors(next);
-    return Object.keys(next).length === 0;
+    return next;
   }
 
   function fillCredentials(userEmail: string, userPassword: string) {
@@ -45,9 +45,9 @@ export function LoginContent() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    if (!validate()) {
-      const firstKey = Object.keys(errors)[0];
-      if (firstKey) document.getElementById(`login-${firstKey}`)?.focus();
+    const firstKey = Object.keys(validate())[0];
+    if (firstKey) {
+      document.getElementById(`login-${firstKey}`)?.focus();
       return;
     }
     if (pending) return;
@@ -101,11 +101,7 @@ export function LoginContent() {
             untuk melanjutkan.
           </p>
         </div>
-        <form
-          className="shop-login-form"
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <form className="shop-login-form" onSubmit={handleSubmit} noValidate>
           <label className="shop-field" htmlFor="login-email">
             Email <span aria-hidden="true">*</span>
             <div className="shop-login-input-wrapper">

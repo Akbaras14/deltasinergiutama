@@ -19,11 +19,14 @@ interface ShopContext {
   refresh: () => void;
   service: CustomerService;
   sync: () => void;
+  reset: () => void;
 }
 const Context = createContext<ShopContext | null>(null);
 /** Keeps demo cart/order state across client navigation. Reload intentionally resets the simulation. */
 export function CustomerProvider({ children }: { children: ReactNode }) {
-  const [service] = useState(() => createCustomerService(createDemoService()));
+  const [service, setService] = useState(() =>
+    createCustomerService(createDemoService()),
+  );
   const [state, setState] = useState<ShopState>({
     products: [],
     cart: [],
@@ -64,6 +67,13 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
         error,
         service,
         sync: () => setState(service.snapshot()),
+        reset: () => {
+          const next = createCustomerService(createDemoService());
+          setState(next.snapshot());
+          setLoading(true);
+          setError("");
+          setService(next);
+        },
         refresh: () => {
           setLoading(true);
           setError("");

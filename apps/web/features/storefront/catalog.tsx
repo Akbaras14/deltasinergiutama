@@ -11,12 +11,10 @@ import {
   MapPin,
   Search,
   ShoppingBag,
-  ShieldCheck,
   SlidersHorizontal,
   Sprout,
   TreePine,
   Users,
-  WalletCards,
   Headphones,
   CalendarCheck,
   CreditCard,
@@ -43,7 +41,11 @@ export function ProductPhoto({
           src={photo.src}
           alt={`Foto ilustrasi ${name}`}
           fill
-          sizes={large ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 50vw, 33vw"}
+          sizes={
+            large
+              ? "(max-width: 700px) 100vw, 50vw"
+              : "(max-width: 700px) 50vw, 33vw"
+          }
           className="shop-plant-image"
           onError={() => setFailed(true)}
         />
@@ -137,8 +139,7 @@ export function HomeContent() {
           <h1>
             Semua yang Anda Butuhkan
             <br />
-            untuk{" "}
-            <em className="shop-hero-script">Ruang Hijau</em>
+            untuk <em className="shop-hero-script">Ruang Hijau</em>
           </h1>
           <span className="shop-hero-divider" />
           <p>
@@ -215,14 +216,19 @@ export function HomeContent() {
                 <Users size={22} />
                 <div>
                   <strong>Lebih Kuat Bersama</strong>
-                  <p>Bergabung dengan komunitas yang peduli alam dan kelestarian.</p>
+                  <p>
+                    Bergabung dengan komunitas yang peduli alam dan kelestarian.
+                  </p>
                 </div>
               </div>
               <div className="shop-grow-feature">
                 <Sprout size={22} />
                 <div>
                   <strong>Berbagi & Belajar</strong>
-                  <p>Tukar tips, bibit, dan pengalaman dengan sesama pencinta tanaman.</p>
+                  <p>
+                    Tukar tips, bibit, dan pengalaman dengan sesama pencinta
+                    tanaman.
+                  </p>
                 </div>
               </div>
             </div>
@@ -244,8 +250,8 @@ export function HomeContent() {
               <div>
                 <strong>Ciptakan Hari Esok yang Lebih Hijau</strong>
                 <p>
-                  Setiap tanaman yang kita tanam hari ini menjadi langkah
-                  menuju masa depan yang lebih bersih dan hijau.
+                  Setiap tanaman yang kita tanam hari ini menjadi langkah menuju
+                  masa depan yang lebih bersih dan hijau.
                 </p>
               </div>
             </div>
@@ -466,11 +472,22 @@ export function DetailContent({ id }: { id: string }) {
           <ProductPhoto name={product.name} large />
           {productPhotos[product.name] && (
             <p className="shop-photo-credit">
-              Foto ilustrasi · {" "}
-              <a href={productPhotos[product.name].source} target="_blank" rel="noreferrer">
+              Foto ilustrasi ·{" "}
+              <a
+                href={productPhotos[product.name].source}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {productPhotos[product.name].author} / Wikimedia Commons
               </a>{" "}
-              · <a href={productPhotos[product.name].license} target="_blank" rel="noreferrer">Lisensi foto</a>
+              ·{" "}
+              <a
+                href={productPhotos[product.name].license}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lisensi foto
+              </a>
               . Tampilan dipotong sesuai bingkai; bukan foto stok nursery.
             </p>
           )}
