@@ -140,6 +140,15 @@ test("customer pages remain within mobile, tablet and desktop viewports", async 
           () => document.documentElement.scrollWidth <= window.innerWidth,
         ),
       ).toBeTruthy();
+      if (route === "/katalog/monstera") {
+        expect(
+          await page.locator(".shop-photo.large").evaluate((photo) => {
+            const frame = photo.getBoundingClientRect();
+            const column = photo.parentElement!.getBoundingClientRect();
+            return frame.right <= column.right + 1;
+          }),
+        ).toBeTruthy();
+      }
       if (route === "/" || route === "/katalog/monstera")
         await page.screenshot({
           path: `docs/testing/customer-${route === "/" ? "home" : "detail"}-${width}.png`,

@@ -620,6 +620,7 @@
 .shop-photo {
   position: relative;
   overflow: hidden;
+  width: 100%;
   min-height: 245px;
   aspect-ratio: 1.45;
   background: #eff3f5;
@@ -989,6 +990,9 @@
   min-width: 0;
   overflow-wrap: anywhere;
   padding: 14px 0;
+}
+.shop-detail > div {
+  min-width: 0;
 }
 .shop-detail h1 {
   font-size: 36px;
