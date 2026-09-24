@@ -30,7 +30,7 @@ Ini fondasi frontend, belum seluruh F0–F7. Belum ada autentikasi, CRUD/mutasi 
 
 Logo resmi belum tersedia. Nama perusahaan ditampilkan sebagai teks; tidak ada logo hasil rekonstruksi. Letakkan logo resmi pada `apps/web/public/brand/cvdeltasinergiutama.png` untuk pengerjaan F01.03.
 
-Demo otomatis tersedia dalam development. Build produksi menonaktifkan portal demo kecuali server dijalankan dengan `DSU_DEMO=true`; opt-in ini hanya untuk demonstrasi/pengujian, bukan produksi operasional.
+Demo tersedia otomatis dalam development dan build produksi. Katalog, login demo, checkout simulasi, dan portal internal memakai data contoh; deployment ini merupakan demonstrasi frontend, bukan sistem operasional dengan backend.
 
 ## Deploy ke Vercel
 
@@ -44,7 +44,7 @@ Konfigurasi `vercel.json` dijalankan dari root repository dan mengarahkan hasil 
 
 Build/install/output sudah ditetapkan di `vercel.json`. Jangan gunakan `.next` di root karena script build menjalankan workspace `apps/web`.
 
-Untuk menampilkan aplikasi simulasi, tambahkan environment variable `DSU_DEMO=true` pada environment Vercel yang akan digunakan (Production dan/atau Preview), kemudian deploy ulang. Tanpa opt-in ini, halaman produksi menampilkan layanan belum diaktifkan.
+Aplikasi simulasi langsung tampil tanpa environment variable tambahan. `DSU_DEMO` tidak lagi digunakan; pengaturan lama di Vercel boleh dihapus. Halaman pelanggan dan portal demo tersedia pada Production maupun Preview.
 
 Jika mengubah pengaturan deployment lama, lakukan Redeploy tanpa memakai build cache. Jangan mengunggah folder `.next` atau `node_modules` ke GitHub.
 
@@ -59,4 +59,4 @@ npm test
 npm run build
 ```
 
-Uji browser: install Chromium dengan `npx playwright install chromium`. Jalankan build pada port 3001 dengan `DSU_DEMO=true`, lalu `npx playwright test`. Screenshot 360/768/1280 px tersimpan di `docs/testing`. Tes ini memverifikasi fondasi baca, bukan seluruh acceptance criteria PRD.
+Uji browser: install Chromium dengan `npx playwright install chromium`. Jalankan `npm run build`, lalu `npm run start --workspace @dsu/web -- --port 3001` dan `npx playwright test`. Tidak diperlukan environment variable demo. Screenshot 360/768/1280 px tersimpan di `docs/testing`.
